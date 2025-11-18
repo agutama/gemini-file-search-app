@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gemini File Search Demo</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Gemini File Search Demo</h1>
+            <p>Upload documents and ask questions about their content</p>
+        </header>
+        
+        <section id="process-diagram">
+            <h2>How File Search Works</h2>
+            <div class="process-diagram">
+                <div class="process-step">
+                    <h3>1. Create File Search Store</h3>
+                    <p>A persistent container for your document embeddings</p>
+                </div>
+                <div class="process-step">
+                    <h3>2. Index Documents</h3>
+                    <p>Upload and process documents into embeddings stored in your File Search store</p>
+                </div>
+                <div class="process-step">
+                    <h3>3. Query with RAG</h3>
+                    <p>Ask questions and get responses grounded in your document content</p>
+                </div>
+            </div>
+        </section>
+        
+        <section id="api-config">
+            <h2>API Configuration</h2>
+            <div class="form-group">
+                <label for="api-key">Gemini API Key:</label>
+                <input type="password" id="api-key" placeholder="Enter your Gemini API key">
+                <button id="save-api-key">Save API Key</button>
+            </div>
+        </section>
+        
+        <section id="store-management">
+            <h2>File Search Store Management</h2>
+            <div class="form-group">
+                <label for="store-name">Store Name:</label>
+                <input type="text" id="store-name" placeholder="Enter store name">
+                <button id="create-store">Create Store</button>
+                <button id="list-stores">List Stores</button>
+            </div>
+            
+            <div id="stores-list">
+                <!-- Stores will be listed here -->
+            </div>
+        </section>
+        
+        <section id="file-upload">
+            <h2>Add Documents to Search</h2>
+            <div class="upload-options">
+                <div class="option">
+                    <h3>Direct Upload to Store</h3>
+                    <p>Upload and index a document directly to your File Search store</p>
+                    <div class="form-group">
+                        <label for="direct-upload-file">Select File:</label>
+                        <input type="file" id="direct-upload-file">
+                        <label for="direct-upload-store">Target Store:</label>
+                        <select id="direct-upload-store"></select>
+                        <button id="direct-upload-btn">Upload to Store</button>
+                    </div>
+                </div>
+                
+                <div class="option">
+                    <h3>Import Files</h3>
+                    <p>First upload the file, then import it to your File Search store</p>
+                    <div class="form-group">
+                        <label for="import-file">Select File:</label>
+                        <input type="file" id="import-file">
+                        <label for="import-store">Target Store:</label>
+                        <select id="import-store"></select>
+                        <button id="import-btn">Import File</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="chunking-config">
+                <h3>Chunking Configuration</h3>
+                <p>Control how documents are split during indexing</p>
+                <div class="form-group">
+                    <label for="max-tokens">Max Tokens per Chunk:</label>
+                    <input type="number" id="max-tokens" value="200" min="100" max="1000">
+                    <label for="overlap-tokens">Max Overlap Tokens:</label>
+                    <input type="number" id="overlap-tokens" value="20" min="0" max="100">
+                </div>
+            </div>
+        </section>
+        
+        <section id="uploaded-files">
+            <h2>Uploaded Files</h2>
+            <p>View all files that have been uploaded to your account</p>
+            <button id="list-files">List Uploaded Files</button>
+            <div id="files-list">
+                <!-- Files will be listed here -->
+            </div>
+            <div id="import-to-store-section" style="margin-top: 20px; display: none;">
+                <h3>Import File to Store</h3>
+                <p>Select a file and store to import the file for search</p>
+                <select id="import-file-select">
+                    <option value="">Select a file</option>
+                </select>
+                <select id="import-store-select">
+                    <option value="">Select a store</option>
+                </select>
+                <button id="import-file-btn">Import to Store</button>
+            </div>
+        </section>
+
+        <section id="chat-interface">
+            <h2>Query Your Documents</h2>
+            <p>Ask questions about the content of your indexed documents</p>
+            <div id="chat-history">
+                <!-- Chat messages will appear here -->
+            </div>
+            <div class="chat-input-area">
+                <select id="query-store">
+                    <option value="">Select a store</option>
+                </select>
+                <input type="text" id="chat-input" placeholder="Ask a question about your documents...">
+                <button id="send-btn">Send</button>
+            </div>
+        </section>
+
+        <section id="token-usage-info">
+            <h3>Token Usage Information</h3>
+            <div id="token-usage-display">
+                <!-- Token usage information will appear here after each query -->
+            </div>
+        </section>
+
+        <section id="citations-info">
+            <h3>Citation Details</h3>
+            <div id="citations-display">
+                <!-- Citation details will appear here after each query -->
+            </div>
+        </section>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
