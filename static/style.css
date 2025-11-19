@@ -52,7 +52,8 @@ input[type="text"],
 input[type="password"],
 input[type="number"],
 input[type="file"],
-select {
+select,
+textarea {
     width: 100%;
     padding: 8px;
     border: 1px solid #ddd;
@@ -140,8 +141,12 @@ button:hover {
     gap: 10px;
 }
 
-.chat-input-area input {
+.chat-input-area input,
+.chat-input-area textarea {
     flex: 1;
+    resize: vertical;
+    min-height: 40px;
+    max-height: 200px;
 }
 
 .chat-input-area select {
