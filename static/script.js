@@ -160,10 +160,12 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Chat functionality
     document.getElementById('send-btn').addEventListener('click', sendMessage);
-    document.getElementById('chat-input').addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') {
+    document.getElementById('chat-input').addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault(); // Prevent adding a new line
             sendMessage();
         }
+        // Allow Shift+Enter for new line
     });
     
     function listStores() {
@@ -444,18 +446,20 @@ document.addEventListener('DOMContentLoaded', function() {
         // Record start time for response time calculation
         const startTime = Date.now();
 
-        // Add user message to chat
+        // Add user message to chat (preserve line breaks for display)
         addToChat('user', message);
         input.value = '';
 
-        // Send to API
+        // Send to API - replace line breaks with spaces for API request
+        const apiMessage = message.replace(/\n/g, ' ');
+
         fetch('/api/chat', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                query: message,
+                query: apiMessage,
                 store_names: [queryStore.value]  // Changed to store_names array to match backend
             })
         })
