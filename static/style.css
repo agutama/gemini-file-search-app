@@ -52,8 +52,7 @@ input[type="text"],
 input[type="password"],
 input[type="number"],
 input[type="file"],
-select,
-textarea {
+select {
     width: 100%;
     padding: 8px;
     border: 1px solid #ddd;
@@ -141,12 +140,8 @@ button:hover {
     gap: 10px;
 }
 
-.chat-input-area input,
-.chat-input-area textarea {
+.chat-input-area input {
     flex: 1;
-    resize: vertical;
-    min-height: 40px;
-    max-height: 200px;
 }
 
 .chat-input-area select {
@@ -329,4 +324,20 @@ details[open] summary {
 
 #citations-display details {
     margin-bottom: 10px;
+}
+
+/* JSON formatting in messages */
+.message pre {
+    margin: 0;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    overflow-x: auto;
+    background-color: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 4px;
+    padding: 10px;
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+    line-height: 1.4;
+    max-width: 100%;
 }

@@ -160,12 +160,10 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Chat functionality
     document.getElementById('send-btn').addEventListener('click', sendMessage);
-    document.getElementById('chat-input').addEventListener('keydown', function(e) {
-        if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault(); // Prevent adding a new line
+    document.getElementById('chat-input').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
             sendMessage();
         }
-        // Allow Shift+Enter for new line
     });
     
     function listStores() {
@@ -446,20 +444,18 @@ document.addEventListener('DOMContentLoaded', function() {
         // Record start time for response time calculation
         const startTime = Date.now();
 
-        // Add user message to chat (preserve line breaks for display)
+        // Add user message to chat
         addToChat('user', message);
         input.value = '';
 
-        // Send to API - replace line breaks with spaces for API request
-        const apiMessage = message.replace(/\n/g, ' ');
-
+        // Send to API
         fetch('/api/chat', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                query: apiMessage,
+                query: message,
                 store_names: [queryStore.value]  // Changed to store_names array to match backend
             })
         })
@@ -535,7 +531,19 @@ document.addEventListener('DOMContentLoaded', function() {
         const chatHistory = document.getElementById('chat-history');
         const messageDiv = document.createElement('div');
         messageDiv.className = `message ${sender}-message`;
-        messageDiv.textContent = message;
+
+        // Check if the message is a valid JSON string
+        try {
+            const parsed = JSON.parse(message);
+            // If it's valid JSON, format it properly and add as pre-formatted code
+            const preElement = document.createElement('pre');
+            preElement.textContent = JSON.stringify(parsed, null, 2);
+            messageDiv.appendChild(preElement);
+        } catch (e) {
+            // If it's not valid JSON, display as plain text
+            messageDiv.textContent = message;
+        }
+
         chatHistory.appendChild(messageDiv);
         chatHistory.scrollTop = chatHistory.scrollHeight;
     }
